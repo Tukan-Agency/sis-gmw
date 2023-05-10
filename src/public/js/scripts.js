@@ -184,7 +184,8 @@ const dominioActual = window.location.hostname;
 
       $.ajax({
         // la URL para la petición
-        url: "http://localhost:3001/tasks/add",
+        // LOCAL HOST url: "http://localhost:3001/tasks/add",
+        url: "https://gmw.watukan.com/tasks/add",
         cache: false,
 
         // la información a enviar
