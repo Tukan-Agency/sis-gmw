@@ -144,6 +144,6 @@ app.use(indexRoutes);
 // public route
 app.use(express.static(path.join(__dirname, "public")));
  
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 3331, function() {
 	console.log('App corriendo en puerto: ' + port)
 });
