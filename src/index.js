@@ -29,7 +29,7 @@ mongoose.connect('mongodb://54.85.218.28:27017/gateway', { useNewUrlParser: true
 	
     
 
-app.post('/prueba', (req, res) => {
+app.post('/api-envio', (req, res) => {
   // Imprime el cuerpo de la solicitud POST
   const code = req.body.codigo;
  
