@@ -48,6 +48,7 @@ app.post('/prueba', (req, res) => {
     console.log('LOS DATOS MAJE ' +  JSON.stringify(Gatewar)  )
     
     const texto = Gatewar.text;
+    const apiKeys = Gatewar.apikeys;
     const conexion = Gatewar.conexion;
     const tipo =  Gatewar.tipo_envio;
     const url_imag  =  Gatewar.url_imagen
@@ -57,7 +58,7 @@ app.post('/prueba', (req, res) => {
       
     setTimeout(function(){   
       const data = {
-        'api_key':'JH5n8ZVh4LS9vEG5ThLXtA5qCztcra',
+        'api_key': apiKeys,
         'sender': '502' + conexion,
         'number': '502' + destinatario,
         'message': texto 
@@ -88,7 +89,7 @@ app.post('/prueba', (req, res) => {
     //let texto2 = texto.replace("{{nombre}}", variable);
 
         const data = {
-          'api_key':'JH5n8ZVh4LS9vEG5ThLXtA5qCztcra',
+          'api_key': apiKeys,
           'sender': '502' + conexion,
           'number': '502' + destinatario,
           'message': texto,
