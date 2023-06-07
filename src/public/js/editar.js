@@ -148,10 +148,12 @@ $(document).ready(function () {
       $(".senders-2").attr("disabled", "disabled");
       const id_main = document.getElementById('id-main').innerText;
       var proyecto = $("#proyecto").val();
-      var conexion = $("#conexion").val();
+      var apikeys = $("#ApiKey").val();
       var texto = $("#texto").val();
-      var code = document.getElementById("code-result").innerText;
       var url_imagen = $("#img").val();
+      var code = document.getElementById("code-result").innerText;
+      var url_api = $("#url_api").val();
+ 
       const radioButtons = document.getElementsByName('tipor');
       let selectedValue;
       
@@ -174,7 +176,7 @@ if (url_imagen === ""){
 }
 
 let tex;
-if (texto === ""){
+if (texto === ""){ 
     tex = '⠀';
 }else{
     tex = texto;
@@ -202,15 +204,15 @@ const dominioActual = window.location.hostname;
      var codigo = code;
        
        
-      var datos =  {
+    var datos =  {
         "proyecto": proyecto,
-        "conexion": conexion,
         "text": tex,
         "url_imagen":link_img,
         "codigo": codigo,
-        "url_api":"api",
+        "apikeys": apikeys,
         "tipo_envio": tipo,
-        "id":id_main
+        "url_api":url_api 
+ 
      };
 
 
@@ -218,7 +220,7 @@ const dominioActual = window.location.hostname;
 
       $.ajax({
         // la URL para la petición
-        url: "https://gmw.watukan.com/tasks/" + id_main  + '/editing',
+        url: "http://localhost:8083/tasks/" + id_main  + '/editing',
         cache: false,
 
         // la información a enviar

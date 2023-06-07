@@ -9,6 +9,7 @@ const TaskSchema = Schema(
     conexion:String,
     codigo:String,
     url_api:String,
+    instancia:String,
     tipo_envio:String,
     apikeys:String
   },

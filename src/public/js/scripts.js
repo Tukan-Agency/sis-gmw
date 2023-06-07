@@ -118,10 +118,12 @@ $(document).ready(function () {
     $("#formdba").submit(function (event) {
       $(".senders").attr("disabled", "disabled");
       var proyecto = $("#proyecto").val();
-      var conexion = $("#conexion").val();
+ 
       var apikeys = $("#ApiKey").val();
       var texto = $("#texto").val();
       var url_imagen = $("#img").val();
+      var url_api = $("#url_api").val();
+ 
       const radioButtons = document.getElementsByName('tipor');
       let selectedValue;
       
@@ -174,18 +176,19 @@ const dominioActual = window.location.hostname;
        
       var datos =  {
         "proyecto": proyecto,
-        "conexion": conexion,
         "text": tex,
         "url_imagen":link_img,
         "codigo": codigo,
         "apikeys": apikeys,
-        "tipo_envio": tipo
+        "tipo_envio": tipo,
+        "url_api":url_api,
+ 
      };
 
       $.ajax({
         // la URL para la petición
         // LOCAL HOST url: "http://localhost:3001/tasks/add",
-        url: "https://gmw.watukan.com/tasks/add",
+        url: "http://localhost:8083/tasks/add",
         cache: false,
 
         // la información a enviar
@@ -220,7 +223,7 @@ const dominioActual = window.location.hostname;
   proyecto_d.innerText = proyectorw.value;
 
 
-  const conexionw = document.getElementById('conexion');
+  const conexionw = document.getElementById('ApiKey');
   const conexion_d = document.getElementById('conexion-d');
   conexion_d.innerText = '+502 ' + conexionw.value;
 
