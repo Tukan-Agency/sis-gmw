@@ -13,6 +13,7 @@ const indexRoutes = require("./routes/index");
 const mongoose = require("mongoose");
 const gatewa = require("../src/models/gatway");
 const fetch = require("node-fetch");
+const jsoncreate = require("../src/models/createjson");
 
 app.use(express.json());
 app.use(cors());
@@ -23,11 +24,21 @@ app.use("/", routes);
 mime.contentType("text/css");
 app.use(express.urlencoded({ extended: true }));
 
+const mongo_host = process.env.MONGO_HOST;
+const mongo_port = process.env.MONGO_PORT;
+const mongo_username = process.env.MONGO_USERNAME;
+const mongo_password = process.env.MONGO_PASSWORD;
+const mongo_db = process.env.MONGO_DB;
+console.log(mongo_host);
+
 mongoose
-  .connect("mongodb://admin:DANIELxp1.*d@54.85.218.28:27017/gateway", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    `mongodb://${mongo_username}:${mongo_password}@${mongo_host}:${mongo_port}/${mongo_db}`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log("Conexión exitosa a MongoDB"))
   .catch((err) => console.error("Error al conectar a MongoDB:", err));
 
@@ -39,90 +50,112 @@ async function gate() {
 gate();
 
 app.post("/api-envio", (req, res) => {
-  // Imprime el cuerpo de la solicitud POST
-  const code = req.body.codigo;
+  try {
+    // Imprime el cuerpo de la solicitud POST
+    const code = req.body.codigo;
 
-  const destinatario = req.body.destinatario;
-  //const namer = req.body.nombre
+    const destinatario = req.body.destinatario;
+    //const namer = req.body.nombre
 
-  console.log(req.body);
+    console.log(req.body);
+    console.log(code, destinatario);
+    // Envía una respuesta
 
-  // Envía una respuesta
-  res.send("¡Solicitud POST recibida!");
+    async function prueba(codigo, destinatario) {
+      try {
+        const userId = codigo;
+        const Gatewar = await gatewa.findOne({ codigo: userId });
 
-  async function prueba(codigo, destinatario) {
-    try {
-      const userId = codigo;
-      const Gatewar = await gatewa.findOne({ codigo: userId });
+        console.log(Gatewar);
 
-      console.log(Gatewar);
+        const texto = Gatewar.text;
+        const instancia = Gatewar.instancia;
+        const apiKeys = Gatewar.apikeys;
+        const conexion = Gatewar.conexion;
+        const tipo = Gatewar.tipo_envio;
+        const instancia_id = Gatewar.url_api;
+        const url_api_text =
+          "https://api.ultramsg.com/" + instancia_id + "/messages/chat";
+        const url_api_img =
+          "https://api.ultramsg.com/" + instancia_id + "/messages/image";
+        const url_imag = Gatewar.url_imagen;
 
-      const texto = Gatewar.text;
-      const instancia = Gatewar.instancia;
-      const apiKeys = Gatewar.apikeys;
-      const conexion = Gatewar.conexion;
-      const tipo = Gatewar.tipo_envio;
-      const url_api = Gatewar.url_api;
-      const url_imag = Gatewar.url_imagen;
+        try {
+        } catch (error) {
+          res.send("Ups... error");
+        }
 
-      if (tipo === "text") {
-        setTimeout(function () {
-          const data = {
-            token: apiKeys,
-            to: destinatario,
-            body: texto,
-          };
+        if (tipo === "text") {
+          setTimeout(function () {
+            const data = {
+              token: apiKeys,
+              to: destinatario,
+              body: texto,
+            };
 
-          fetch(url_api, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data); // manejar la respuesta de la API
+            fetch(url_api_text, {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: { "Content-Type": "application/json" },
             })
-            .catch((error) => {
-              console.error(error); // manejar el error
-              res.send("NO SE PUDO ENVIAR" + error);
-            });
-        }, 1000);
-      }
-      if (tipo === "imgr") {
-        setTimeout(function () {
-          //PARA ENVIAR VARIABLES
-          //let variable = '*'+namer+'*';
-          //let texto2 = texto.replace("{{nombre}}", variable);
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data); // manejar la respuesta de la API
+              })
+              .catch((error) => {
+                console.log(data);
+                console.error("NO SE PUDO ENVIAR", error); // manejar el error
+                // No envíes otra respuesta al cliente aquí
+                // res.send("NO SE PUDO ENVIAR" + error);
+              });
+          }, 500);
+        }
+        if (tipo === "imgr") {
+          setTimeout(function () {
+            //PARA ENVIAR VARIABLES
+            //let variable = '*'+namer+'*';
+            //let texto2 = texto.replace("{{nombre}}", variable);
 
-          const data = {
-            token: apiKeys,
-            to: destinatario,
-            caption: texto,
-            image: url_imag,
-          };
-          console.log(data);
+            const data = {
+              token: apiKeys,
+              to: destinatario,
+              caption: texto,
+              image: url_imag,
+            };
+            console.log(data);
 
-          fetch(url_api, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data); // manejar la respuesta de la API
+            fetch(url_api_img, {
+              method: "POST",
+              body: JSON.stringify(data),
+              headers: { "Content-Type": "application/json" },
             })
-            .catch((error) => {
-              console.error(error); // manejar el error
-              res.send("NO SE PUDO ENVIAR" + error);
-            });
-        }, 1000);
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data); // manejar la respuesta de la API
+              })
+              .catch((error) => {
+                console.log(data);
+                console.error("NO SE PUDO ENVIAR", error); // manejar el error
+                // No envíes otra respuesta al cliente aquí
+                // res.send("NO SE PUDO ENVIAR" + error);
+              });
+          }, 500);
+        }
+
+        res.send("¡Solicitud POST recibida!");
+      } catch (error) {
+        // Manejo del error
+        console.error("Ocurrió un error:", error);
       }
-    } catch (error) {
-      // Manejo del error
-      console.error("Ocurrió un error:", error);
     }
+    try {
+      prueba(code, destinatario);
+    } catch (error) {
+      console.log("no se pudo ejecutar: " + error);
+    }
+  } catch (error) {
+    console.log("un error");
   }
-  prueba(code, destinatario);
 });
 // settings
 app.set("port", process.env.PORT || 3000);

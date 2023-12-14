@@ -93,8 +93,7 @@ button.btn-emoji {
   padding: 4px;
 }
 .card.cool {
-  max-height: 380px;
-  overflow-y: scroll;
+  max-height: auto;
 }
 .div-vacio {
   background: #ebebeb61;

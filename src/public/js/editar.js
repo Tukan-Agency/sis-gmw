@@ -1,6 +1,8 @@
 
 //alert('prueba');
 
+const urlPrincipal = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+
 var tipo_msg = document.getElementById("tippo").innerText
 console.log('TIPO ENVIO ES: ' + tipo_msg)
 setTimeout(() => {
@@ -220,7 +222,7 @@ const dominioActual = window.location.hostname;
 
       $.ajax({
         // la URL para la petición
-        url: "https://gmw.watukan.com//tasks/" + id_main  + '/editing',
+        url: urlPrincipal + "/tasks/" + id_main  + '/editing',
         cache: false,
 
         // la información a enviar
