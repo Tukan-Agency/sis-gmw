@@ -177,4 +177,5 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(process.env.PORT || 3331, function () {
   console.log("App corriendo en puerto: " + port);
+  console.log("Link 🚀: " + "http://localhost:" + port);
 });
